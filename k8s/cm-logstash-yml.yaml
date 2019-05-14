@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  logstash.yml: |+
+    log.level: debug
+    http.host: "0.0.0.0"
+    xpack.monitoring.elasticsearch.url: http://helk-elasticsearch:9200
+    xpack.monitoring.enabled: true
+    path.config: /usr/share/logstash/helk/docker/helk-logstash/pipeline
+    path.plugins: ["/usr/share/logstash/helk/docker/helk-logstash/plugins"]
+
+kind: ConfigMap
+metadata:
+  annotations:
+  name: logstash-yml

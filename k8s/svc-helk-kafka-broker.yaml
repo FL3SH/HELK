@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"component":"helk-kafka-broker"},"name":"helk-kafka-broker","namespace":"helk"},"spec":{"clusterIP":"10.96.236.147","ports":[{"name":"transport","port":9092,"protocol":"TCP","targetPort":9092}],"selector":{"component":"helk-kafka-broker"},"sessionAffinity":"None"}}
+  creationTimestamp: null
+  labels:
+    component: helk-kafka-broker
+  name: helk-kafka-broker
+spec:
+  ports:
+  - name: transport
+    port: 9092
+    protocol: TCP
+    targetPort: 9092
+  selector:
+    component: helk-kafka-broker
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

@@ -1,0 +1,86 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"logstash"},"name":"helk-logstash","namespace":"helk"},"spec":{"replicas":1,"selector":{"matchLabels":{"app":"logstash"}},"template":{"metadata":{"labels":{"app":"logstash"}},"spec":{"containers":[{"command":["bash","/usr/share/logstash/scritps/logstash-entrypoint.sh"],"image":"docker.elastic.co/logstash/logstash:6.6.1","name":"helk-logstash","ports":[{"containerPort":4560,"protocol":"TCP"}],"volumeMounts":[{"mountPath":"/usr/share/logstash/helk","name":"git-repo"},{"mountPath":"/usr/share/logstash/config/logstash.yml","name":"logstash-yml","subPath":"logstash.yml"},{"mountPath":"/usr/share/logstash/scritps/logstash-entrypoint.sh","name":"logstash-entrypoint","subPath":"logstash-entrypoint.sh"}]}],"initContainers":[{"args":["clone","--single-branch","--","https://github.com/Cyb3rWard0g/HELK.git","/repo"],"image":"alpine/git","name":"init-clone-repo","volumeMounts":[{"mountPath":"/repo","name":"git-repo"}]}],"volumes":[{"emptyDir":{},"name":"git-repo"},{"configMap":{"name":"logstash-yml"},"name":"logstash-yml"},{"configMap":{"name":"logstash-entrypoint"},"name":"logstash-entrypoint"}]}}}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: logstash
+  name: helk-logstash
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: logstash
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: logstash
+    spec:
+      containers:
+      - command:
+        - bash
+        - /usr/share/logstash/scritps/logstash-entrypoint.sh
+        image: docker.elastic.co/logstash/logstash:6.6.1
+        imagePullPolicy: IfNotPresent
+        name: helk-logstash
+  
+        ports:
+        - containerPort: 4560
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/share/logstash/helk
+          name: git-repo
+        - mountPath: /usr/share/logstash/config/logstash.yml
+          name: logstash-yml
+          subPath: logstash.yml
+        - mountPath: /usr/share/logstash/scritps/logstash-entrypoint.sh
+          name: logstash-entrypoint
+          subPath: logstash-entrypoint.sh
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - args:
+        - clone
+        - --single-branch
+        - --
+        - https://github.com/Cyb3rWard0g/HELK.git
+        - /repo
+        image: alpine/git
+        imagePullPolicy: Always
+        name: init-clone-repo
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /repo
+          name: git-repo
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - emptyDir: {}
+        name: git-repo
+      - configMap:
+          defaultMode: 420
+          name: logstash-yml
+        name: logstash-yml
+      - configMap:
+          defaultMode: 0777
+          name: logstash-entrypoint
+        name: logstash-entrypoint
+status: {}

@@ -1,0 +1,93 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1beta1","kind":"Deployment","metadata":{"annotations":{},"labels":{"component":"elasticsearch"},"name":"helk-elasticsearch","namespace":"helk"},"spec":{"replicas":1,"template":{"metadata":{"labels":{"component":"elasticsearch"}},"spec":{"containers":[{"env":[{"name":"CLUSTER_NAME","value":"helk-cluster"},{"name":"NODE_NAME","value":"helk-1"},{"name":"NUMBER_OF_MASTERS","value":"1"},{"name":"ES_JAVA_OPTS","value":"-Xms2g -Xmx2g"},{"name":"NETWORK_HOST","value":"_eth0_"},{"name":"PROCESSORS","valueFrom":{"resourceFieldRef":{"resource":"limits.cpu"}}}],"image":"docker.elastic.co/elasticsearch/elasticsearch:6.6.1","name":"helk-elasticsearch","ports":[{"containerPort":9300,"name":"transport"}],"resources":{"limits":{"cpu":2}},"volumeMounts":[{"mountPath":"/usr/share/elasticsearch/config/elasticsearch.yml","name":"config","subPath":"elasticsearch.yml"}]}],"initContainers":[{"command":["sysctl","-w","vm.max_map_count=262144"],"image":"busybox:1.27.2","name":"init-sysctl","securityContext":{"privileged":true}}],"volumes":[{"configMap":{"name":"elasticsearch-yml"},"name":"config"}]}}}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    component: elasticsearch
+  name: helk-elasticsearch
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      component: elasticsearch
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: elasticsearch
+    spec:
+      containers:
+      - env:
+        - name: CLUSTER_NAME
+          value: helk-cluster
+        - name: NODE_NAME
+          value: helk-1
+        - name: NUMBER_OF_MASTERS
+          value: "1"
+        - name: ES_JAVA_OPTS
+          value: -Xms2g -Xmx2g
+        - name: NETWORK_HOST
+          value: _eth0_
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              divisor: "0"
+              resource: limits.cpu
+        image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+        command: ["bash", "/usr/share/elasticsearch/scritps/elasticsearch-entrypoint.sh"]
+        imagePullPolicy: IfNotPresent
+        name: helk-elasticsearch
+        ports:
+        - containerPort: 9300
+          name: transport
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "1"
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          name: config
+          subPath: elasticsearch.yml
+        - mountPath: /usr/share/elasticsearch/scritps/elasticsearch-entrypoint.sh
+          name: elasticsearch-entrypoint
+          subPath: elasticsearch-entrypoint.sh
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        image: busybox:1.27.2
+        imagePullPolicy: IfNotPresent
+        name: init-sysctl
+        resources: {}
+        securityContext:
+          privileged: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: elasticsearch-yml
+        name: config
+      - configMap:
+          defaultMode: 420
+          name: elasticsearch-entrypoint
+        name: elasticsearch-entrypoint
+status: {}

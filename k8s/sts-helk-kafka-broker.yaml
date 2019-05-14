@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    field.cattle.io/publicEndpoints: "null"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1beta1","kind":"StatefulSet","metadata":{"annotations":{},"labels":{"component":"helk-kafka-broker"},"name":"helk-kafka-broker","namespace":"helk"},"spec":{"replicas":1,"serviceName":"helk-kafka-broker","template":{"metadata":{"labels":{"component":"helk-kafka-broker"}},"spec":{"containers":[{"env":[{"name":"KAFKA_BROKER_NAME","value":"helk-kafka-broker-0.helk-kafka-broker"},{"name":"KAFKA_BROKER_ID","value":"1"},{"name":"KAFKA_BROKER_PORT","value":"9092"},{"name":"REPLICATION_FACTOR","value":"1"},{"name":"ADVERTISED_LISTENER","value":"10.0.12.161"},{"name":"KAFKA_CREATE_TOPICS","value":"winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity"},{"name":"KAFKA_HEAP_OPTS","value":"-Xmx2G -Xms2G"},{"name":"LOG_RETENTION_HOURS","value":"4"},{"name":"ZOOKEEPER_NAME","value":"helk-zookeeper"}],"image":"cyb3rward0g/helk-kafka-broker:2.1.0","name":"helk-kafka-broker","ports":[{"containerPort":9092}],"volumeMounts":[{"mountPath":"/opt/helk/kafka/config/server.properties","name":"kafka-server-properties","subPath":"server.properties"}]}],"volumes":[{"configMap":{"name":"kafka-server-properties"},"name":"kafka-server-properties"}]}}}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    component: helk-kafka-broker
+  name: helk-kafka-broker
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      component: helk-kafka-broker
+  serviceName: helk-kafka-broker
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        component: helk-kafka-broker
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_BROKER_NAME
+          value: helk-kafka-broker-0.helk-kafka-broker.helk.svc.cluster.local
+        - name: KAFKA_BROKER_ID
+          value: "1"
+        - name: KAFKA_BROKER_PORT
+          value: "9092"
+        - name: REPLICATION_FACTOR
+          value: "1"
+        - name: ADVERTISED_LISTENER
+          value: 35.187.99.228
+        - name: KAFKA_CREATE_TOPICS
+          value: winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity
+        - name: KAFKA_HEAP_OPTS
+          value: -Xmx1G -Xms1G
+        - name: LOG_RETENTION_HOURS
+          value: "4"
+        - name: ZOOKEEPER_NAME
+          value: helk-zookeeper
+        image: cyb3rward0g/helk-kafka-broker:2.1.0
+        imagePullPolicy: IfNotPresent
+        name: helk-kafka-broker
+        ports:
+        - containerPort: 9092
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/helk/kafka/config/server.properties
+          name: kafka-server-properties
+          subPath: server.properties
+        - mountPath: /opt/helk/kafka/scripts/kafka-create-topics.sh
+          name: kafka-create-topics
+          subPath: kafka-create-topics.sh
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: kafka-server-properties
+        name: kafka-server-properties
+      - configMap:
+          defaultMode: 0777
+          name: kafka-create-topics
+        name: kafka-create-topics
+  updateStrategy:
+    type: OnDelete
+status:
+  replicas: 0

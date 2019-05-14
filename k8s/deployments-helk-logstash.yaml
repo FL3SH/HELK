@@ -57,7 +57,7 @@ spec:
         - clone
         - --single-branch
         - --
-        - https://github.com/Cyb3rWard0g/HELK.git
+        - https://github.com/FL3SH/HELK.git
         - /repo
         image: alpine/git
         imagePullPolicy: Always

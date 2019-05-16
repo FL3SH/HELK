@@ -4,7 +4,7 @@
  - [gcloud](https://cloud.google.com/sdk/docs/downloads-interactive) (for gke)
  - git
  
-##Infrastucture
+## Infrastucture
 - gke cluster with at least 2 nodes (n1-standard-2)
 
 # Deploy

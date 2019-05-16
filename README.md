@@ -113,6 +113,10 @@ There are a few things that I would like to accomplish with the HELK as shown in
 # TO-Do
 
 - [ ] Kubernetes Cluster Migration
+- [ ] Helm chart migration
+- [ ] Kafka cluster
+- [ ] Elastisearch cluster
+- [ ] Secure connection between components
 - [ ] OSQuery Data Ingestion
 - [ ] MITRE ATT&CK mapping to logs or dashboards
 - [ ] Cypher for Apache Spark Integration (Adding option for Zeppelin Notebook)

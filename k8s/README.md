@@ -8,7 +8,7 @@
 - gke cluster with at least 2 nodes (n1-standard-2)
 
 # Deploy
-## GKE cluser
+## GKE cluster
 ```bash
 gcloud container clusters create helk --cluster-version 1.12.7-gke.10 --num-nodes 2 --machine-type n1-standard-2
 ```

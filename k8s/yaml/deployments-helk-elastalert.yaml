@@ -1,7 +1,6 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  generation: 1
   labels:
     component: elastalert
   name: helk-elastalert
@@ -24,6 +23,3 @@ spec:
         image: cyb3rward0g/helk-elastalert:0.2.1
         imagePullPolicy: IfNotPresent
         name: helk-elastalert
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler

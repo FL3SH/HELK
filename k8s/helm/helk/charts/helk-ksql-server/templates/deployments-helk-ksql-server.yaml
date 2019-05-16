@@ -1,0 +1,39 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    component: ksql-server
+  name: helk-ksql-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: ksql-server
+  template:
+    metadata:
+      labels:
+        component: ksql-server
+    spec:
+      containers:
+      - env:
+        - name: KSQL_BOOTSTRAP_SERVERS
+          value: helk-kafka-broker:9092
+        - name: KSQL_LISTENERS
+          value: http://0.0.0.0:8088
+        - name: KSQL_KSQL_SERVICE_ID
+          value: wardog
+        - name: KSQL_CUB_KAFKA_TIMEOUT
+          value: "300"
+        - name: KSQL_KSQL_COMMIT_INTERVAL_MS
+          value: "2000"
+        - name: KSQL_KSQL_CACHE_MAX_BYTES_BUFFERING
+          value: "10000000"
+        - name: KSQL_KSQL_STREAMS_AUTO_OFFSET_RESET
+          value: earliest
+        - name: KSQL_HEAP_OPTS
+          value: -Xmx1g
+        image: confluentinc/cp-ksql-server:5.1.2
+        name: helk-ksql-server
+        ports:
+        - containerPort: 8088
+          protocol: TCP

@@ -73,7 +73,7 @@ echo -e "${GREEN}Creating helk deployment${NC}"
 
 for file in "${INSTALL_FILES[@]}" ;do
   echo -e "${GREEN}Deploying ${BOLD}$file ${NC}"
-	kubectl -n $NS apply -f $file
+	kubectl -n $NS apply -f yaml/$file
 done
 
 echo -e "${YELLOW}Waiting for external IP${NC}"
@@ -84,9 +84,9 @@ do
 done
 echo -e "${GREEN}External IP was set to: ${BOLD}$ADVERTISED_LISTENER ${NC}"
 echo -e "${YELLOW}Seting external IP for kafka${NC}"
-$SED "s/ADVERTISED_LISTENER_IP/$ADVERTISED_LISTENER/g" sts-helk-kafka-broker.yaml
-kubectl -n $NS apply -f sts-helk-kafka-broker.yaml
-mv sts-helk-kafka-broker.yaml.new sts-helk-kafka-broker.yaml
+$SED "s/ADVERTISED_LISTENER_IP/$ADVERTISED_LISTENER/g" yaml/sts-helk-kafka-broker.yaml
+kubectl -n $NS apply -f yaml/sts-helk-kafka-broker.yaml
+mv yaml/sts-helk-kafka-broker.yaml.new yaml/sts-helk-kafka-broker.yaml
 echo -e "${GREEN}Done.${NC}"
 echo -e "${GREEN}Set ${BOLD}hosts: [\"$ADVERTISED_LISTENER:9092\"]${NC} ${GREEN}in output.kafka in winlogbeat.yml.${NC}"
 }

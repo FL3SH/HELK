@@ -1,17 +1,11 @@
 # Perquisition
 ## Tools
- - [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
- - [gcloud](https://cloud.google.com/sdk/docs/downloads-interactive) (for gke)
- - git
+ - helm
  
 ## Infrastucture
-- gke cluster with at least 2 nodes (n1-standard-2)
+- k8s cluster with helm
 
 # Deploy
-## GKE cluster
-```bash
-gcloud container clusters create helk --cluster-version 1.12.7-gke.10 --num-nodes 2 --machine-type n1-standard-2
-```
 ## HELK
 ```bash
 git clone https://github.com/FL3SH/HELK.git

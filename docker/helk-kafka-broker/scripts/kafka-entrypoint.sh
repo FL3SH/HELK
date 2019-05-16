@@ -19,6 +19,11 @@ if [[ -z "$KAFKA_BROKER_PORT" ]]; then
 fi
 echo "[HELK-DOCKER-INSTALLATION-INFO] Setting kafka broker port to $KAFKA_BROKER_PORT"
 
+if [[ -z "$ADVERTISED_LISTENER_PORT" ]]; then
+  ADVERTISED_LISTENER_PORT=9092
+fi
+echo "[HELK-DOCKER-INSTALLATION-INFO] Setting kafka broker port to $KAFKA_BROKER_PORT"
+
 if [[ -z "$KAFKA_BROKER_NAME" ]]; then 
   KAFKA_BROKER_NAME=helk-kafka-broker
 fi
@@ -52,7 +57,7 @@ echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Advertised listener value to $ADVE
 
 
 echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Kafka server properties file.."
-sed -i "s/^advertised\.listeners\=PLAINTEXT:\/\/.*$/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
+sed -i "s/^advertised\.listeners\=PLAINTEXT:\/\/.*$/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:${ADVERTISED_LISTENER_PORT}/g" ${KAFKA_HOME}/config/server.properties
 #sed -i "s/^listeners\=PLAINTEXT:\/\/.*$/listeners\=PLAINTEXT:\/\/${KAFKA_BROKER_NAME}\:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
 sed -i "s/^listeners\=PLAINTEXT:\/\/.*$/listeners=PLAINTEXT:\/\/:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
 sed -i "s/^broker\.id\=.*$/broker.id=${KAFKA_BROKER_ID}/g" ${KAFKA_HOME}/config/server.properties

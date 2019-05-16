@@ -45,7 +45,9 @@ spec:
         - name: REPLICATION_FACTOR
           value: "1"
         - name: ADVERTISED_LISTENER
-          value: 35.187.116.69
+          value: 10.0.12.161 
+        - name: ADVERTISED_LISTENER_PORT
+          value: "32690"
         - name: KAFKA_CREATE_TOPICS
           value: winlogbeat, SYSMON_JOIN, filebeat, winsysmon, winsecurity
         - name: KAFKA_HEAP_OPTS

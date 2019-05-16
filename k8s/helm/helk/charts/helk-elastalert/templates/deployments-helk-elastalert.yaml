@@ -1,0 +1,25 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    component: elastalert
+  name: helk-elastalert
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: elastalert
+  template:
+    metadata:
+      labels:
+        component: elastalert
+    spec:
+      containers:
+      - env:
+        - name: ES_HOST
+          value: helk-elastalert
+        - name: ES_PORT
+          value: "9200"
+        image: cyb3rward0g/helk-elastalert:0.2.1
+        imagePullPolicy: IfNotPresent
+        name: helk-elastalert

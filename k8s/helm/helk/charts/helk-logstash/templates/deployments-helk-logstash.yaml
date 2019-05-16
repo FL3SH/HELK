@@ -1,0 +1,47 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    component: logstash
+  name: helk-logstash
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: logstash
+  template:
+    metadata:
+      labels:
+        component: logstash
+    spec:
+      containers:
+      - command:
+        - bash
+        - /usr/share/logstash/scritps/logstash-entrypoint.sh
+        image: fl3sh/helk-logstash:6.6.1
+        name: helk-logstash
+        ports:
+        - containerPort: 4560
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /usr/share/logstash/pipeline
+          name: logstash-pipeline
+        - mountPath: /usr/share/logstash/output_templates
+          name: logstash-output-templates
+        - mountPath: /usr/share/logstash/scritps/logstash-entrypoint.sh
+          name: logstash-entrypoint
+          subPath: logstash-entrypoint.sh
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: logstash-pipeline
+        name: logstash-pipeline
+      - configMap:
+          defaultMode: 420
+          name: logstash-output-templates
+        name: logstash-output-templates
+      - configMap:
+          defaultMode: 511
+          name: logstash-entrypoint
+        name: logstash-entrypoint

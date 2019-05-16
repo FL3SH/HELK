@@ -55,18 +55,11 @@ spec:
         - name: ZOOKEEPER_NAME
           value: helk-zookeeper
         image: cyb3rward0g/helk-kafka-broker:2.1.0
-        #command: ["bash", "/opt/helk/kafka/scripts/kafka-entrypoint.sh"]
         name: helk-kafka-broker
         ports:
         - containerPort: 9092
           protocol: TCP
         volumeMounts:
-        #- mountPath: /opt/helk/kafka/config/server.properties
-        #  name: kafka-server-properties
-        #  subPath: server.properties
-        #- mountPath: /opt/helk/kafka/scripts/kafka-create-topics.sh
-        #  name: kafka-create-topics
-        #  subPath: kafka-create-topics.sh
         - mountPath: /opt/helk/kafka/scripts/kafka-entrypoint.sh
           name: kafka-entrypoint
           subPath: kafka-entrypoint.sh
@@ -75,9 +68,6 @@ spec:
           defaultMode: 0777
           name: kafka-entrypoint
         name: kafka-entrypoint
-      #- configMap:
-      #    name: kafka-server-properties
-      #  name: kafka-server-properties
       - configMap:
           defaultMode: 511
           name: kafka-create-topics

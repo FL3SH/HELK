@@ -82,7 +82,7 @@ elasticsearch.requestTimeout: 300000
 #pid.file: /var/run/kibana.pid
 
 # Enables you specify a file where Kibana stores log output.
-logging.dest: /usr/share/kibana/config/kibana_logs.log
+logging.dest: /usr/share/kibana/logs/kibana_logs.log
 
 # Set the value of this setting to true to suppress all logging output.
 #logging.silent: false

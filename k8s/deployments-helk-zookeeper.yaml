@@ -1,43 +1,36 @@
-apiVersion: extensions/v1beta1
-kind: Deployment
+apiVersion: v1
+kind: Service
 metadata:
-  annotations:
-    deployment.kubernetes.io/revision: "1"
-    kubectl.kubernetes.io/last-applied-configuration: |
-      {"apiVersion":"apps/v1","kind":"Deployment","metadata":{"annotations":{},"creationTimestamp":null,"labels":{"component":"helk-zookeeper"},"name":"helk-zookeeper","namespace":"helk"},"spec":{"replicas":1,"selector":{"matchLabels":{"component":"helk-zookeeper"}},"strategy":{},"template":{"metadata":{"creationTimestamp":null,"labels":{"component":"helk-zookeeper"}},"spec":{"containers":[{"image":"cyb3rward0g/helk-zookeeper:2.1.0","name":"helk-zookeeper"}]}}}}
-  creationTimestamp: null
-  generation: 1
   labels:
     component: helk-zookeeper
   name: helk-zookeeper
 spec:
-  progressDeadlineSeconds: 600
+  ports:
+  - name: zookeeper
+    port: 2181
+    protocol: TCP
+    targetPort: 2181
+  selector:
+    component: helk-zookeeper
+  type: ClusterIP
+---
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    component: helk-zookeeper
+  name: helk-zookeeper
+spec:
   replicas: 1
-  revisionHistoryLimit: 10
   selector:
     matchLabels:
       component: helk-zookeeper
-  strategy:
-    rollingUpdate:
-      maxSurge: 25%
-      maxUnavailable: 25%
-    type: RollingUpdate
   template:
     metadata:
-      creationTimestamp: null
       labels:
         component: helk-zookeeper
     spec:
       containers:
       - image: cyb3rward0g/helk-zookeeper:2.1.0
-        imagePullPolicy: IfNotPresent
         name: helk-zookeeper
-        resources: {}
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
-status: {}

@@ -53,8 +53,8 @@ echo "[HELK-DOCKER-INSTALLATION-INFO] Setting Advertised listener value to $ADVE
 
 echo "[HELK-DOCKER-INSTALLATION-INFO] Updating Kafka server properties file.."
 sed -i "s/^advertised\.listeners\=PLAINTEXT:\/\/.*$/advertised\.listeners\=PLAINTEXT\:\/\/${ADVERTISED_LISTENER}\:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
-sed -i "s/^listeners\=PLAINTEXT:\/\/.*$/listeners\=PLAINTEXT:\/\/${KAFKA_BROKER_NAME}\:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
-sed -i "s/^listeners\=PLAINTEXT:\/\/.*$/listeners=PLAINTEXT:\/\/${KAFKA_BROKER_NAME}\:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
+#sed -i "s/^listeners\=PLAINTEXT:\/\/.*$/listeners\=PLAINTEXT:\/\/${KAFKA_BROKER_NAME}\:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
+sed -i "s/^listeners\=PLAINTEXT:\/\/.*$/listeners=PLAINTEXT:\/\/:${KAFKA_BROKER_PORT}/g" ${KAFKA_HOME}/config/server.properties
 sed -i "s/^broker\.id\=.*$/broker.id=${KAFKA_BROKER_ID}/g" ${KAFKA_HOME}/config/server.properties
 sed -i "s/^log.retention.hours\=.*$/log.retention.hours\=$LOG_RETENTION_HOURS/g" ${KAFKA_HOME}/config/server.properties
 
@@ -65,3 +65,4 @@ echo "[HELK-DOCKER-INSTALLATION-INFO] Creating the following kafka topics: $KAFK
 ./kafka-create-topics.sh &
 
 exec "$@"
+

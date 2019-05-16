@@ -10,5 +10,8 @@ FROM docker.elastic.co/logstash/logstash:6.6.1
 LABEL maintainer="Roberto Rodriguez @Cyb3rWard0g"
 LABEL description="Dockerfile base for the HELK Logstash."
 
-RUN mv /usr/share/logstash/config/logstash.yml /usr/share/logstash/config/logstash.yml.backup
+#RUN mv /usr/share/logstash/config/logstash.yml /usr/share/logstash/config/logstash.yml.backup
 COPY --chown=logstash:logstash config/logstash.yml /usr/share/logstash/config/logstash.yml
+COPY --chown=logstash:logstash enrichments/cti /usr/share/logstash/cti
+COPY --chown=logstash:logstash plugins/logstash-offline-plugins-6.6.1.zip /usr/share/logstash/plugins/logstash-offline-plugins-6.6.1.zip
+RUN logstash-plugin install file:///usr/share/logstash/plugins/logstash-offline-plugins-6.6.1.zip

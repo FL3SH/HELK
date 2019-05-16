@@ -1,22 +1,35 @@
 apiVersion: v1
-kind: ReplicationController
+kind: Service
 metadata:
   labels:
-    component: elk
-    role: kibana
-  name: kibana
-  selfLink: /api/v1/namespaces/helk/replicationcontrollers/kibana
+    role: helk-kibana
+  name: helk-kibana
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 5601
+  selector:
+    role: helk-kibana
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  generation: 1
+  labels:
+    role: helk-kibana
+  name: helk-kibana
 spec:
   replicas: 1
   selector:
-    component: elk
-    role: kibana
+    role: helk-kibana
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        component: elk
-        role: kibana
+        role: helk-kibana
     spec:
       containers:
       - command:
@@ -27,42 +40,37 @@ spec:
           value: http://helk-elasticsearch:9200
         - name: CLUSTER_NAME
           value: helk-cluster
+        - name: SERVER_HOST
+          value: localhost
+        - name: SERVER_PORT
+          value: "5601"
         image: docker.elastic.co/kibana/kibana:6.6.1
-        imagePullPolicy: IfNotPresent
         name: helk-kibana
         ports:
         - containerPort: 5601
           name: http
           protocol: TCP
-        resources: {}
-        securityContext:
-          runAsUser: 0
         volumeMounts:
         - mountPath: /opt/kibana/config
-          name: config
+          name: kibana-yml
         - mountPath: /usr/share/kibana/dashboards
-          name: dashboards
+          name: kibana-dashboards
         - mountPath: /usr/share/kibana/scripts
           name: kibana-entrypoint
         - mountPath: /usr/share/kibana/logs
           name: logs
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      schedulerName: default-scheduler
-      securityContext: {}
-      terminationGracePeriodSeconds: 30
       volumes:
       - configMap:
           defaultMode: 420
           name: kibana-yml
-        name: config
+        name: kibana-yml
       - configMap:
-          defaultMode: 420
-          name: dashboards
-        name: dashboards
-      - configMap:
-          defaultMode: 420
+          defaultMode: 511
           name: kibana-entrypoint
         name: kibana-entrypoint
+      - configMap:
+          defaultMode: 420
+          name: kibana-dashboards
+        name: kibana-dashboards
       - emptyDir: {}
         name: logs

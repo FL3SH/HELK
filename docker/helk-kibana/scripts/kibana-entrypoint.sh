@@ -79,4 +79,4 @@ exec /usr/local/bin/kibana-docker &
 echo "[HELK-KIBANA-DOCKER-INSTALLATION-INFO] Running helk_kibana_setup.sh script..."
 /usr/share/kibana/scripts/kibana-setup.sh
 
-tail -f /usr/share/kibana/config/kibana_logs.log
+tail -f /usr/share/kibana/logs/kibana_logs.log

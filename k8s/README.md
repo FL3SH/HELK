@@ -24,5 +24,5 @@ kubectl -n helk port-forwar svc/helk-kibana 8080:80
 #http://localhost:8080
 ```
 
-#Warning
+# Warning
 - Kafka external IP address is provided dynamically so every new deployment may have different IP, to avoid this issue please check https://cloud.google.com/kubernetes-engine/docs/tutorials/configuring-domain-name-static-ip

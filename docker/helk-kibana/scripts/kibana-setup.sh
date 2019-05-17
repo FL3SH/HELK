@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 # HELK script: kibana-setup.sh
 # HELK script description: Creates Kibana index patterns, dashboards and visualizations automatically.

@@ -22,7 +22,7 @@ bash helk_install_gke.sh
 ```bash
 git clone https://github.com/FL3SH/HELK.git
 cd HELK/k8s
-bash helk_install_kind.sh
+sudo ./helk_install_kind.sh
 ```
 ### Akcess to kibana
 ```bash

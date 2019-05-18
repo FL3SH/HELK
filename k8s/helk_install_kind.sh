@@ -80,7 +80,6 @@ done
 KIND_NODE_IP=$(kubectl get no -ojsonpath='{.items[].status.addresses[0].address}')
 sudo iptables -t nat -I PREROUTING -p tcp --dport 31111 -j  DNAT --to-destination $KIND_NODE_IP:31111
 sudo iptables -A FORWARD -p tcp -d $KIND_NODE_IP --dport 31111 -j ACCEPT
-set -x
 $SED -e 's/ADVERTISED_LISTENER_IP/kafka-hack/g; s/kafka-hack-ip/'"$KIND_NODE_IP"'/g; s/LoadBalancer/NodePort/g' yaml/statefulset-helk-kafka-broker.yaml
 kubectl -n $NS apply -f yaml/statefulset-helk-kafka-broker.yaml
 mv yaml/statefulset-helk-kafka-broker.yaml.new yaml/statefulset-helk-kafka-broker.yaml

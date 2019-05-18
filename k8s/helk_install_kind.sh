@@ -77,7 +77,6 @@ for file in "${INSTALL_FILES[@]}" ;do
   echo -e "${GREEN}Deploying ${BOLD}$file ${NC}"
 	kubectl -n $NS apply -f yaml/$file
 done
-set -x
 KIND_NODE_IP=$(kubectl get no -ojsonpath='{.items[].status.addresses[0].address}')
 sudo iptables -t nat -I PREROUTING -p tcp --dport 31111 -j  DNAT --to-destination $KIND_NODE_IP:31111
 sudo iptables -A FORWARD -p tcp -d $KIND_NODE_IP --dport 31111 -j ACCEPT

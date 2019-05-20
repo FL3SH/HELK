@@ -36,9 +36,6 @@ spec:
         component: helk-kafka-broker
     spec:
       hostAliases:
-      - ip: "kafka-hack-ip"
-        hostnames:
-        - "kafka-hack"
       containers:
       - env:
         - name: KAFKA_BROKER_NAME

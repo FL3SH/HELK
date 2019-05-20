@@ -34,7 +34,7 @@ deployments-helk-logstash.yaml
 replicationcontroller-kibana.yaml
 deployments-helk-elasticsearch.yaml
 deployments-helk-zookeeper.yaml
-sts-helk-kafka-broker.yaml
+statefulset-helk-kafka-broker.yaml
 deployments-helk-ksql-server.yaml
 )
 
@@ -84,9 +84,9 @@ do
 done
 echo -e "${GREEN}External IP was set to: ${BOLD}$ADVERTISED_LISTENER ${NC}"
 echo -e "${YELLOW}Seting external IP for kafka${NC}"
-$SED "s/ADVERTISED_LISTENER_IP/$ADVERTISED_LISTENER/g" yaml/sts-helk-kafka-broker.yaml
-kubectl -n $NS apply -f yaml/sts-helk-kafka-broker.yaml
-mv yaml/sts-helk-kafka-broker.yaml.new yaml/sts-helk-kafka-broker.yaml
+$SED "s/ADVERTISED_LISTENER_IP/$ADVERTISED_LISTENER/g" yaml/statefulset-helk-kafka-broker.yaml
+kubectl -n $NS apply -f yaml/statefulset-helk-kafka-broker.yaml
+mv yaml/statefulset-helk-kafka-broker.yaml.new yaml/statefulset-helk-kafka-broker.yaml
 echo -e "${GREEN}Done.${NC}"
 echo -e "${GREEN}Set ${BOLD}hosts: [\"$ADVERTISED_LISTENER:9092\"]${NC} ${GREEN}in output.kafka in winlogbeat.yml.${NC}"
 }
